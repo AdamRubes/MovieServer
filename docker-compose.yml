@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  web:
+    restart: unless-stopped
+    build: .
+    pull_policy: build
+
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.gawa-ar-http.rule=Host(`ar.gawa.dtbox.cz`)"
+      - "traefik.http.routers.gawa-ar-http.entrypoints=web"
+      - "traefik.http.routers.gawa-ar-http.middlewares=gawa-ar-redirect-https@docker"
+
+      - "traefik.http.middlewares.gawa-ar-redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.gawa-ar-redirect-https.redirectscheme.permanent=true"
+
+      - "traefik.http.routers.gawa-ar-https.rule=Host(`ar.gawa.dtbox.cz`)"
+      - "traefik.http.routers.gawa-ar-https.entrypoints=websecure"
+      - "traefik.http.routers.gawa-ar-https.tls=true"
+      - "traefik.http.routers.gawa-ar-https.tls.certresolver=letsencrypt"
