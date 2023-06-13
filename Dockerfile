@@ -20,7 +20,7 @@ RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
 
 ARG UID=1010
-ARG GID=1000
+ARG GID=1010
 
 RUN groupadd -g "${GID}" admin \
     && useradd --create-home --no-log-init -u "${UID}" -g "${GID}" admin
