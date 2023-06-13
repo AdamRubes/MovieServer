@@ -36,6 +36,15 @@ def movies(request):
 def movie(request, id):
     m = Movie.objects.get(id=id)
     f = CommentForm()
+    commentArray = Comment.objects.filter(movie=m).order_by('-created_at')
+    avgRating = 0
+    #Bez jasného typu je to pain
+    sum = 0
+    numberOfItems = len(commentArray)
+    for x in commentArray:
+        sum = sum + x.rating
+        
+    avgRating = sum / numberOfItems
 
     if request.POST:
         f = CommentForm(request.POST)
@@ -55,8 +64,10 @@ def movie(request, id):
 
     context = {
         "movie": m,
-        "comments": Comment.objects.filter(movie=m).order_by('-created_at'),
+        "comments": commentArray,
+        "averageRating": avgRating,
         "form": f
+
     }
     return render(request, 'movie.html', context)
 

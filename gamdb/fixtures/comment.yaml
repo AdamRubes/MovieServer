@@ -1,0 +1,16 @@
+- model: films.comment
+  pk: 1
+  fields:
+    movie: 1
+    author: ReyLover69
+    text: Uf velmi kvalitní
+    rating: 69
+    created_at: 2023-06-06 05:54:04.907917+00:00
+- model: films.comment
+  pk: 2
+  fields:
+    movie: 1
+    author: Wow
+    text: hgc
+    rating: 56
+    created_at: 2023-06-13 06:49:58.269541+00:00
