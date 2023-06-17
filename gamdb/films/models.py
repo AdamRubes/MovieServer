@@ -19,7 +19,7 @@ class Movie(models.Model):
         # for i in self.genres.all():
         #     out += f"{i.name}, "
         # return out
-
+        
 class Comment(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     author = models.CharField(max_length=255, blank=True)
@@ -27,7 +27,6 @@ class Comment(models.Model):
     rating = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
         
-
 class Director(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()

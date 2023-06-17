@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 """gamdb URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -26,4 +28,4 @@ urlpatterns = [
     path('herci/', actors, name="actors"),
     path('herec/<int:id>', actor, name="actor"),
     path('', homepage, name="homepage")
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

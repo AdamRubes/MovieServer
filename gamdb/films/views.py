@@ -2,14 +2,16 @@ from django.shortcuts import render
 from .models import Movie, Director, Actor, Genre, Comment
 from django.db.models import Q
 from .forms import CommentForm
+from django.db.models import Avg
+from django.shortcuts import redirect
 
 def directors(request):
     context = {
         'directors': Director.objects.all()
-    }
+    } 
     print(context)
     return render(request, 'directors.html', context)
-
+ 
 def director(request, id):
     context = {
         "director": Director.objects.get(id=id)
@@ -37,14 +39,10 @@ def movie(request, id):
     m = Movie.objects.get(id=id)
     f = CommentForm()
     commentArray = Comment.objects.filter(movie=m).order_by('-created_at')
-    avgRating = 0
+
     #Bez jasného typu je to pain
-    sum = 0
-    numberOfItems = len(commentArray)
-    for x in commentArray:
-        sum = sum + x.rating
-        
-    avgRating = sum / numberOfItems
+    avgRating = commentArray.aggregate(Avg('rating'))['rating__avg'] or 0
+
 
     if request.POST:
         f = CommentForm(request.POST)
@@ -59,16 +57,21 @@ def movie(request, id):
             if not c.author:
                 c.author = 'Anonym'
             c.save()
+            #přepočítat avg
+            commentArray = Comment.objects.filter(movie=m).order_by('-created_at')
+            avgRating = commentArray.aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+
             # nastavit prazdny form
             f = CommentForm()
-
+            return redirect('movie', id=id)
+            
     context = {
         "movie": m,
         "comments": commentArray,
         "averageRating": avgRating,
         "form": f
-
     }
+
     return render(request, 'movie.html', context)
 
 def actors(request):
